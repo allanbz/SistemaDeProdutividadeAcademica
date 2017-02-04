@@ -8,20 +8,46 @@ class Colaborador {
 	private ArrayList <Projeto> projetos = new ArrayList <Projeto> ();	//lista de projetos que o colaborador participa
 	private ArrayList <Publicacao> publicacoes = new ArrayList <Publicacao> ();	//lista de publicacoes realizadas pelo colaborador
 	
+	protected String getNome() {
+		
+		return this.nome;
+	}
+	
 	protected void setAtributos(String nome, String email) {
 		
 		this.nome = nome;
 		this.email = email;
 	}
 	
-	protected String getNome() {
-		return this.nome;
+	protected void setProjeto(Projeto projeto) {
+		
+		projetos.add(projeto);
+	}
+	
+	protected void setPublicacao(Publicacao publicacao) {
+		
+		publicacoes.add(publicacao);
 	}
 }
 
 class Graduando extends Colaborador {
 	
 	private int qtdProjetos;	//so pode participar de 2
+	
+	protected int getQtd() {
+		
+		return this.qtdProjetos;
+	}
+	
+	protected void incProjeto() {
+		
+		this.qtdProjetos++;
+	}
+	
+	protected void decProjeto() {
+		
+		this.qtdProjetos--;
+	}
 }
 
 class Mestrando extends Colaborador {
@@ -35,31 +61,83 @@ class Doutorando extends Colaborador {
 class Professor extends Colaborador {
 	
 	private ArrayList <Orientacao> orientador = new ArrayList <Orientacao> ();	//lista de orientacoes feitas pelo professor
+	
+	protected void setOrientacao(Orientacao orientacao) {
+		
+		orientador.add(orientacao);
+	}
 }
 
 class Pesquisador extends Colaborador {
 	
 	private ArrayList <Orientacao> orientado = new ArrayList <Orientacao> ();	//lista de orientacoes recebidas pelo pesquisador
+	
+	protected void setOrientacao(Orientacao orientacao) {
+		
+		orientado.add(orientacao);
+	}
 }
 
 class Projeto {
 	
 	private String titulo;
-	private int anoDeInicio;
-	private int anoDeTermino;
+	private int anoInicio;
+	private int anoTermino;
 	private String agenciaFinanciadora;
-	private int valorFinanciado;
-	private String objetivo;
+	private double valorFinanciado;
 	private String descricao;
+	private String objetivo;
 	private ArrayList <String> participantes = new ArrayList <String> ();	//lista dos participantes do projeto
 	private ArrayList <Publicacao> producaoAcademica = new ArrayList <Publicacao> ();	//lista de publicacoes associadas ao projeto
+	
 	private int status;	//1-em elaboracao /2-em andamento /3-concluido
+	private int temProfessor;	//0-nao /1-sim
+	
+	protected void setAtributos(String titulo, int anoInicio, int anoTermino, String agencia, double valor, String descricao, String objetivo) {
+		
+		this.titulo = titulo;
+		this.anoInicio = anoInicio;
+		this.anoTermino = anoTermino;
+		this.agenciaFinanciadora = agencia;
+		this.valorFinanciado = valor;
+		this.descricao = descricao;
+		this.objetivo = objetivo;
+		this.status = 1;
+	}
+	
+	protected void setProfessor() {
+		
+		this.temProfessor = 1;
+	}
+	
+	protected void addParticipante(String colaborador) {
+		
+		if(participantes.contains(colaborador)) {
+			System.out.println(">> O colaborador escolhido já está associado ao projeto! <<");
+		} 
+		
+		else {
+			participantes.add(colaborador);
+			System.out.println("\n>> Colaborador associado com sucesso! <<");
+		}
+	}	
+	
+	protected void addPublicacao(Publicacao publicacao) {
+		
+		producaoAcademica.add(publicacao);
+	}
 }
 
 class Producao {
 	
 	private String titulo;
 	private int anoDePublicacao;
+	
+	protected void setAtributos(String titulo, int ano) {
+		
+		this.titulo = titulo;
+		this.anoDePublicacao = ano;
+	}
 }
 
 class Publicacao extends Producao {
@@ -67,12 +145,29 @@ class Publicacao extends Producao {
 	private ArrayList <String> autores = new ArrayList <String> ();	//lista dos autores da publicacao
 	private String nomeDaConferencia;
 	private String projetoAssociado;
+	
+	protected void setAtributos(String nomeConf, String projetoAss) {
+		
+		this.nomeDaConferencia = nomeConf;
+		this.projetoAssociado = projetoAss;
+	}
+	
+	protected void addAutor(String autor) {
+		
+		autores.add(autor);
+	}
 }
 
 class Orientacao extends Producao {
 	
 	private String professorOrientador;
 	private String pesquisador;
+	
+	protected void setAtributos(String orientador, String pesquisador) {
+		
+		this.professorOrientador = orientador;
+		this.pesquisador = pesquisador;
+	}
 }
 
 public class ProdutividadeAcademica {
@@ -143,7 +238,6 @@ public class ProdutividadeAcademica {
 									listaColaboradores.add(doutorando);
 									break;
 							}
-							
 							break;
 						case 2:
 							Professor professor = new Professor();
@@ -160,11 +254,94 @@ public class ProdutividadeAcademica {
 					System.out.println("\nColaborador cadastrado com sucesso!");
 					numColaboradores++;
 					break;
-				
 				case 2:
-					//proximo comando
+					Projeto projeto = new Projeto();
+					
+					System.out.println("\nPreencha os dados do Projeto:\n");
+					System.out.print("Título: ");
+					scanner.nextLine();	//escape
+					String titulo = scanner.nextLine();
+					System.out.print("Ano de Início: ");
+					int anoInicio = scanner.nextInt();
+					System.out.print("Ano de término: ");
+					int anoTermino = scanner.nextInt();
+					System.out.print("Agência financiadora: ");
+					scanner.nextLine();	//escape
+					String agencia = scanner.nextLine();
+					System.out.print("Valor financiado: ");
+					double valor = scanner.nextDouble();
+					System.out.print("Descrição: ");
+					scanner.nextLine();	//escape
+					String descricao = scanner.nextLine();
+					System.out.print("Objetivo: ");
+					String objetivo = scanner.nextLine();
+					
+					projeto.setAtributos(titulo, anoInicio, anoTermino, agencia, valor, descricao, objetivo);
+					
+					//loop para leitura dos participantes
+					System.out.print("\nQuantos participantes deseja associar ao projeto? ");
+					int qtd = scanner.nextInt();
+					scanner.nextLine();	//escape
+					
+					for(int i = 0; i < qtd; i++) {	
+						System.out.println("\nLista dos colaboradores cadastrados em nosso Sistema:");
+						
+						for(Colaborador c : listaColaboradores) {
+							System.out.printf("\n%s", c.getNome());
+						}
+						
+						System.out.print("\n\nNome de quem deseja adicionar: ");	
+						String colaborador = scanner.nextLine();
+						int flag = 0;
+						
+						for(Colaborador c : listaColaboradores) {	//procura o nome do colaborador na lista
+							String participante = c.getNome();
+							
+							if(participante.equals(colaborador)) {	//compara os nomes pra pegar objeto correspondente
+								
+								flag = 1;	//sinaliza que nome foi encontrado
+								if(c instanceof Graduando) {	//se for graduando, verifica a quantidade de projetos em que ja esta
+									
+									int qtdProjetos = ((Graduando) c).getQtd();
+									
+									if(qtdProjetos < 2) {
+										((Graduando) c).incProjeto();	//incrementa quantidade
+									}
+									
+									else {
+										System.out.println(">> O colaborador escolhido é graduando, e já está participando de 2 projetos! <<");
+										break;
+									}
+								}
+								
+								else if (c instanceof Professor) {	
+									projeto.setProfessor();	//seta flag no projeto
+								}
+								
+								c.setProjeto(projeto);	//associa projeto ao colaborador
+								projeto.addParticipante(colaborador);	//adiciona o colaborador na lista de participantes
+								break;
+							}
+						}
+						
+						if(flag == 0) {
+							System.out.println("\n>> Colaborador não encontrado! <<");
+						}
+					}			
+					break;
+				case 3:
+					//metodo de edicao de projeto
+					break;
+				case 4:
+					//metodo de criacao de producao
+					break;
+				case 5:
+					//metodo para consulta de dados
+					break;
+				case 6:
+					//metodo para imprimir relatorio de producao
 					break;
 			}
-		}		
+		}
 	}
 }
