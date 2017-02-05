@@ -8,6 +8,31 @@ class Colaborador {
 	private ArrayList <Projeto> projetos = new ArrayList <Projeto> ();	//lista de projetos que o colaborador participa
 	private ArrayList <Publicacao> publicacoes = new ArrayList <Publicacao> ();	//lista de publicacoes realizadas pelo colaborador
 	
+	protected void printDados() {
+		
+		System.out.printf("\nNome: %s\nEmail: %s\n", this.nome, this.email);
+		
+		if(projetos.size() != 0) {
+			System.out.println("\nParticipou dos Projetos:\n");
+			
+			for(Projeto p : projetos) {
+				
+				System.out.printf("Título: %s, Ano de término: %d\n", p.getTitulo(), p.getAnoDeTermino());
+			}
+		}
+
+		if(publicacoes.size() != 0) {
+			System.out.println("\nRealizou as Publicações:\n");
+			
+			for(Publicacao p : publicacoes) {
+				
+				System.out.printf("Título: %s, Ano: %d\n", p.getTitulo(), p.getAno());
+			}
+		}
+		
+		System.out.println("");
+	}
+	
 	protected String getNome() {
 		
 		return this.nome;
@@ -60,6 +85,15 @@ class Professor extends Colaborador {
 	
 	private ArrayList <Orientacao> orientador = new ArrayList <Orientacao> ();	//lista de orientacoes feitas pelo professor
 	
+	protected void printOrientacao() {
+		
+		System.out.println("Foi um Orientador em:\n");
+		
+		for(Orientacao o : orientador) {
+			System.out.printf("''%s'', no ano de %d\n", o.getTitulo(), o.getAno());
+		}
+	}
+	
 	protected void setOrientacao(Orientacao orientacao) {
 		
 		orientador.add(orientacao);
@@ -69,6 +103,15 @@ class Professor extends Colaborador {
 class Pesquisador extends Colaborador {
 	
 	private ArrayList <Orientacao> orientado = new ArrayList <Orientacao> ();	//lista de orientacoes recebidas pelo pesquisador
+	
+	protected void printOrientacao() {
+		
+		System.out.println("\nFoi orientado em:\n");
+		
+		for(Orientacao o : orientado) {
+			System.out.printf("''%s'', no ano de %d\n", o.getTitulo(), o.getAno());
+		}
+	}
 	
 	protected void setOrientacao(Orientacao orientacao) {
 		
@@ -90,6 +133,45 @@ class Projeto {
 	
 	private int status;	//1-em elaboracao /2-em andamento /3-concluido
 	private int temProfessor;	//0-nao /1-sim
+	
+	protected void printProjeto() {
+		
+		System.out.printf("\nTítulo: %s\nAno de início: %d\nAno de término: %d", this.titulo, this.anoInicio, this.anoTermino);
+		System.out.printf("\nAgência Financiadora: %s\nValor financiado %.2f\nDescrição: %s", this.agenciaFinanciadora, this.valorFinanciado, this.descricao);
+		System.out.printf("\nObjetivo: %s", this.objetivo);
+		
+		switch(this.status) {
+			case 1:
+				System.out.println("\nStatus: EM ELABORAÇÃO");
+				break;
+			case 2:
+				System.out.println("\nStatus: EM ANDAMENTO");
+				break;
+			case 3:
+				System.out.println("\nStatus: CONCLUÍDO");
+				break;
+		}
+		
+		if(participantes.size() != 0) {
+			
+			System.out.println("\nLista de participantes do Projeto:\n");
+			
+			for(String s : participantes) {
+				
+				System.out.printf("%s\n", s);
+			}
+		}		
+		
+		if(producaoAcademica.size() != 0) {
+			
+			System.out.println("\nLista de publicações associadas ao Projeto:\n");
+			
+			for(Publicacao p : producaoAcademica) {
+				
+				System.out.printf("Título: %s, ano: %d\n", p.getTitulo(), p.getAno());
+			}
+		}	
+	}
 	
 	protected void addParticipante(String colaborador) {
 		
@@ -145,6 +227,11 @@ class Projeto {
 		this.status = status;
 	}
 	
+	protected int getAnoDeTermino() {
+		
+		return this.anoTermino;
+	}
+	
 	protected String getTitulo() {
 		
 		return this.titulo;
@@ -155,6 +242,16 @@ class Producao {
 	
 	private String titulo;
 	private int anoDePublicacao;
+	
+	protected int getAno() {
+		
+		return this.anoDePublicacao;
+	}
+	
+	protected String getTitulo() {
+		
+		return this.titulo;
+	}
 	
 	protected void setAtributos(String titulo, int ano) {
 		
@@ -468,6 +565,8 @@ public class ProdutividadeAcademica {
 			System.out.print("Nome do orientador: ");
 			String nomeOrientador = scanner.nextLine();
 			
+			orientacao.setAtributos(titulo, anoOrientacao);
+			
 			for(Colaborador c : listaColaboradores) {	//procura o nome do autor na lista
 				String colaborador = c.getNome();
 				
@@ -503,7 +602,7 @@ public class ProdutividadeAcademica {
 				}
 			}
 			
-			System.out.println("\n\n>> Orientação registrada com sucesso! <<");
+			System.out.println("\n>> Orientação registrada com sucesso! <<");
 			orientacao.setAtributos(nomeOrientador, nomePesquisador);
 			numOrientacoes++;
 			listaProducoes.add(orientacao);
@@ -591,6 +690,79 @@ public class ProdutividadeAcademica {
 		return publicacao;
 	}
 	
+	public static void consultarDados() {
+		
+		Scanner scanner = new Scanner(System.in);
+		
+		System.out.println("\nQual a modalidade de consulta que deseja realizar?\n\n1-Por colaborador\n2-Por projeto\n");
+		System.out.print("Opção desejada: ");
+		int opcao = scanner.nextInt();
+		scanner.nextLine();	//escape
+		
+		if(opcao == 1) {
+			System.out.println("\nLista dos colaboradores cadastrados em nosso Sistema:");
+			
+			for(Colaborador c : listaColaboradores) {
+				System.out.printf("\n%s", c.getNome());
+			}
+			
+			System.out.print("\n\nNome de quem deseja consultar: ");	
+			String colaborador = scanner.nextLine();
+			int flag = 0;
+			
+			for(Colaborador c : listaColaboradores) {	//procura o nome do colaborador na lista
+				String participante = c.getNome();
+				
+				if(participante.equals(colaborador)) {	//compara os nomes pra pegar objeto correspondente
+					
+					flag = 1;	//sinaliza que nome foi encontrado
+					
+					c.printDados();
+					
+					if(c instanceof Professor) {
+						
+						((Professor) c).printOrientacao();
+					}
+					
+					else if (c instanceof Pesquisador) {	
+						
+						((Pesquisador) c).printOrientacao();
+					}
+					
+					break;
+				}
+			}
+			
+			if(flag == 0) {
+				System.out.println("\n>> Colaborador não encontrado! <<");
+			}
+		}
+		
+		else if(opcao == 2) {
+			
+			System.out.println("\nLista de Projetos em nosso Sistema:");
+			
+			for(Projeto p : listaProjetos) {
+				System.out.printf("\n%s", p.getTitulo());
+			}
+			
+			System.out.print("\n\nNome do Projeto que deseja consultar: ");	
+			String titulo = scanner.nextLine();
+			
+			int flag = 0;
+			
+			for(Projeto p : listaProjetos) {	//procura o nome do projeto na lista
+				String nomeDoProjeto = p.getTitulo();
+				
+				if(nomeDoProjeto.equals(titulo)) {	//compara os titulos pra pegar objeto correspondente
+					
+					flag = 1;	//sinaliza que titulo foi encontrado
+					p.printProjeto();
+				}
+			}
+		}
+	}
+	
 	static ArrayList <Colaborador> listaColaboradores = new ArrayList <Colaborador> ();
 	static ArrayList <Projeto> listaProjetos = new ArrayList <Projeto> ();
 	static ArrayList <Producao> listaProducoes = new ArrayList <Producao> ();
@@ -634,7 +806,7 @@ public class ProdutividadeAcademica {
 					criarProducao();
 					break;
 				case 5:
-					//metodo para consulta de dados
+					consultarDados();
 					break;
 				case 6:
 					//metodo para imprimir relatorio de producao
