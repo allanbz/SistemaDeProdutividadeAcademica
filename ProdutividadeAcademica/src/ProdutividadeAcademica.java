@@ -34,9 +34,9 @@ class Graduando extends Colaborador {
 	
 	private int qtdProjetos;	//so pode participar de 2
 	
-	protected int getQtd() {
+	protected void decProjeto() {
 		
-		return this.qtdProjetos;
+		this.qtdProjetos--;
 	}
 	
 	protected void incProjeto() {
@@ -44,18 +44,16 @@ class Graduando extends Colaborador {
 		this.qtdProjetos++;
 	}
 	
-	protected void decProjeto() {
+	protected int getQtd() {
 		
-		this.qtdProjetos--;
-	}
+		return this.qtdProjetos;
+	}	
 }
 
 class Mestrando extends Colaborador {
-
 }
 
 class Doutorando extends Colaborador {
-	
 }
 
 class Professor extends Colaborador {
@@ -93,19 +91,33 @@ class Projeto {
 	private int status;	//1-em elaboracao /2-em andamento /3-concluido
 	private int temProfessor;	//0-nao /1-sim
 	
-	protected String getTitulo() {
+	protected void addParticipante(String colaborador) {
 		
-		return this.titulo;
+		if(participantes.contains(colaborador)) {
+			System.out.println("\n>> O colaborador escolhido já está associado ao projeto! <<");
+		} 
+		
+		else {
+			participantes.add(colaborador);
+			System.out.println("\n>> Colaborador associado com sucesso! <<");
+		}
+	}	
+	
+	protected void addPublicacao(Publicacao publicacao) {
+		
+		producaoAcademica.add(publicacao);
 	}
 	
-	protected int getStatus() {
+	protected void setAtributos(String titulo, int anoInicio, int anoTermino, String agencia, double valor, String descricao, String objetivo) {
 		
-		return this.status;
-	}
-	
-	protected void setStatus(int status) {
-		
-		this.status = status;
+		this.titulo = titulo;
+		this.anoInicio = anoInicio;
+		this.anoTermino = anoTermino;
+		this.agenciaFinanciadora = agencia;
+		this.valorFinanciado = valor;
+		this.descricao = descricao;
+		this.objetivo = objetivo;
+		setStatus(1);
 	}
 	
 	protected int getProfessor() {
@@ -123,33 +135,19 @@ class Projeto {
 		return this.producaoAcademica.size();
 	}
 	
-	protected void setAtributos(String titulo, int anoInicio, int anoTermino, String agencia, double valor, String descricao, String objetivo) {
+	protected int getStatus() {
 		
-		this.titulo = titulo;
-		this.anoInicio = anoInicio;
-		this.anoTermino = anoTermino;
-		this.agenciaFinanciadora = agencia;
-		this.valorFinanciado = valor;
-		this.descricao = descricao;
-		this.objetivo = objetivo;
-		setStatus(1);
+		return this.status;
 	}
 	
-	protected void addParticipante(String colaborador) {
+	protected void setStatus(int status) {
 		
-		if(participantes.contains(colaborador)) {
-			System.out.println("\n>> O colaborador escolhido já está associado ao projeto! <<");
-		} 
-		
-		else {
-			participantes.add(colaborador);
-			System.out.println("\n>> Colaborador associado com sucesso! <<\n");
-		}
-	}	
+		this.status = status;
+	}
 	
-	protected void addPublicacao(Publicacao publicacao) {
+	protected String getTitulo() {
 		
-		producaoAcademica.add(publicacao);
+		return this.titulo;
 	}
 }
 
@@ -171,15 +169,19 @@ class Publicacao extends Producao {
 	private String nomeDaConferencia;
 	private String projetoAssociado;
 	
-	protected void setAtributos(String nomeConf, String projetoAss) {
-		
-		this.nomeDaConferencia = nomeConf;
-		this.projetoAssociado = projetoAss;
-	}
-	
 	protected void addAutor(String autor) {
 		
 		autores.add(autor);
+	}
+	
+	protected void setConferencia(String nomeConf) {
+		
+		this.nomeDaConferencia = nomeConf;
+	}
+	
+	protected void setProjeto(String projetoAss) {
+		
+		this.projetoAssociado = projetoAss;
 	}
 }
 
@@ -251,6 +253,37 @@ public class ProdutividadeAcademica {
 
 		System.out.println("\n>> Colaborador cadastrado com sucesso! <<");
 	}
+		
+	public static void criarProjeto() {
+		
+		Scanner scanner = new Scanner(System.in);
+		
+		Projeto projeto = new Projeto();
+		
+		System.out.println("\nPreencha os dados do Projeto:\n");
+		System.out.print("Título: ");
+		String titulo = scanner.nextLine();
+		System.out.print("Ano de Início: ");
+		int anoInicio = scanner.nextInt();
+		System.out.print("Ano de término: ");
+		int anoTermino = scanner.nextInt();
+		System.out.print("Agência financiadora: ");
+		scanner.nextLine();	//escape
+		String agencia = scanner.nextLine();
+		System.out.print("Valor financiado: ");
+		double valor = scanner.nextDouble();
+		System.out.print("Descrição: ");
+		scanner.nextLine();	//escape
+		String descricao = scanner.nextLine();
+		System.out.print("Objetivo: ");
+		String objetivo = scanner.nextLine();
+		
+		projeto.setAtributos(titulo, anoInicio, anoTermino, agencia, valor, descricao, objetivo);
+		
+		projeto = incluirParticipante(projeto);
+		listaProjetos.add(projeto);
+		System.out.println("\n>> Projeto criado com sucesso! <<");
+	}
 	
 	public static Projeto incluirParticipante(Projeto projeto) {
 		
@@ -307,37 +340,6 @@ public class ProdutividadeAcademica {
 		}
 		
 		return projeto;
-	}
-	
-	public static void criarProjeto() {
-		
-		Scanner scanner = new Scanner(System.in);
-		
-		Projeto projeto = new Projeto();
-		
-		System.out.println("\nPreencha os dados do Projeto:\n");
-		System.out.print("Título: ");
-		String titulo = scanner.nextLine();
-		System.out.print("Ano de Início: ");
-		int anoInicio = scanner.nextInt();
-		System.out.print("Ano de término: ");
-		int anoTermino = scanner.nextInt();
-		System.out.print("Agência financiadora: ");
-		scanner.nextLine();	//escape
-		String agencia = scanner.nextLine();
-		System.out.print("Valor financiado: ");
-		double valor = scanner.nextDouble();
-		System.out.print("Descrição: ");
-		scanner.nextLine();	//escape
-		String descricao = scanner.nextLine();
-		System.out.print("Objetivo: ");
-		String objetivo = scanner.nextLine();
-		
-		projeto.setAtributos(titulo, anoInicio, anoTermino, agencia, valor, descricao, objetivo);
-		
-		projeto = incluirParticipante(projeto);
-		listaProjetos.add(projeto);
-		System.out.println(">> Projeto criado com sucesso! <<");
 	}
 	
 	public static void editarProjeto() {
@@ -416,6 +418,179 @@ public class ProdutividadeAcademica {
 		}
 	}
 	
+	public static void criarProducao() {
+		
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("\nQuem tipo de Produção deseja registrar?\n\n1-Publicação\n2-Orientação\n");
+		System.out.print("Opção desejada: ");
+		int opcao = scanner.nextInt();
+		scanner.nextLine();	//escape
+		
+		if(opcao == 1) {
+			
+			Publicacao publicacao = new Publicacao();
+			
+			System.out.println("\nPreencha os dados da Publicação:\n");
+			System.out.print("Título: ");
+			String titulo = scanner.nextLine();
+			System.out.print("Ano de publicação: ");
+			int anoPublicacao = scanner.nextInt();
+			scanner.nextLine();	//escape
+			System.out.print("Nome da Conferência: ");
+			String nomeConferencia = scanner.nextLine();
+			
+			publicacao.setAtributos(titulo, anoPublicacao);
+			publicacao.setConferencia(nomeConferencia);
+			publicacao = incluirAutor(publicacao);
+			
+			System.out.print("\nEssa Publicação está associada a algum Projeto (1-Sim/2-Não)? ");
+			int resposta = scanner.nextInt();
+			
+			if(resposta == 1) {
+				publicacao = associarProjeto(publicacao);
+			}
+			
+			System.out.println("\n>> Publicação registrada com sucesso! <<");
+			numPublicacoes++;
+			listaProducoes.add(publicacao);
+		}
+		
+		else if(opcao == 2) {
+			
+			Orientacao orientacao = new Orientacao();
+			
+			System.out.println("\nPreencha os dados da Orientação:\n");
+			System.out.print("Título: ");
+			String titulo = scanner.nextLine();
+			System.out.print("Ano de orientação: ");
+			int anoOrientacao = scanner.nextInt();
+			scanner.nextLine();	//escape
+			System.out.print("Nome do orientador: ");
+			String nomeOrientador = scanner.nextLine();
+			
+			for(Colaborador c : listaColaboradores) {	//procura o nome do autor na lista
+				String colaborador = c.getNome();
+				
+				if(colaborador.equals(nomeOrientador)) {	//compara os nomes pra pegar objeto correspondente
+					if(c instanceof Professor) {
+						((Professor) c).setOrientacao(orientacao);
+						break;
+					}
+					
+					else {
+						System.out.println("\n>> O colaborador precisa ser um Professor para ser orientador! <<");
+						return;
+					}
+				}
+			}
+			
+			System.out.print("Nome do pesquisador: ");
+			String nomePesquisador = scanner.nextLine();
+			
+			for(Colaborador c : listaColaboradores) {	//procura o nome do autor na lista
+				String colaborador = c.getNome();
+				
+				if(colaborador.equals(nomePesquisador)) {	//compara os nomes pra pegar objeto correspondente
+					if(c instanceof Pesquisador) {
+						((Pesquisador) c).setOrientacao(orientacao);
+						break;
+					}
+					
+					else {
+						System.out.println("\n>> O colaborador precisa ser um Pesquisador para ser orientado! <<");
+						return;
+					}
+				}
+			}
+			
+			System.out.println("\n\n>> Orientação registrada com sucesso! <<");
+			orientacao.setAtributos(nomeOrientador, nomePesquisador);
+			numOrientacoes++;
+			listaProducoes.add(orientacao);
+		}
+	}
+	
+	public static Publicacao incluirAutor(Publicacao publicacao) {
+		
+		Scanner scanner = new Scanner(System.in);
+		
+		System.out.print("\nQuantos autores possui a Publicação? ");
+		int qtd = scanner.nextInt();
+		scanner.nextLine();	//escape
+		
+		for(int i = 0; i < qtd; i++) {	
+			
+			System.out.println("\nLista dos colaboradores cadastrados em nosso Sistema:");
+			
+			for(Colaborador c : listaColaboradores) {
+				System.out.printf("\n%s", c.getNome());
+			}
+			
+			System.out.print("\n\nQual o nome do autor? ");	
+			String autor = scanner.nextLine();
+			int flag = 0;
+			
+			for(Colaborador c : listaColaboradores) {	//procura o nome do autor na lista
+				String colaborador = c.getNome();
+				
+				if(colaborador.equals(autor)) {	//compara os nomes pra pegar objeto correspondente
+					
+					flag = 1;	//sinaliza que autor foi encontrado
+					c.setPublicacao(publicacao);
+					publicacao.addAutor(colaborador);
+					System.out.println("\n>> Autor registrado com sucesso! <<");
+					break;
+				}
+			}
+			
+			if(flag == 0) {
+				System.out.println("\n>> Autor não encontrado! <<");
+			}
+		}
+		
+		return publicacao;
+	}
+	
+	public static Publicacao associarProjeto(Publicacao publicacao) {
+		
+		Scanner scanner = new Scanner(System.in);
+		
+		System.out.println("\nLista dos Projetos cadastrados em nosso Sistema:");
+		
+		for(Projeto p : listaProjetos) {
+			System.out.printf("\n%s", p.getTitulo());
+		}
+		
+		System.out.print("\n\nQual o título do Projeto? ");	
+		String tituloDeEntrada = scanner.nextLine();
+		int flag = 0;
+		
+		for(Projeto p : listaProjetos) {	//procura o nome do projeto na lista
+			String titulo = p.getTitulo();
+			
+			if(titulo.equals(tituloDeEntrada)) {	//compara os nomes pra pegar objeto correspondente
+				
+				flag = 1;	//sinaliza que projeto foi encontrado
+				if(p.getStatus() == 2) {
+					p.addPublicacao(publicacao);
+					publicacao.setProjeto(titulo);
+					System.out.println("\n>> Projeto associado com sucesso! <<");
+					break;
+				}
+				
+				else {
+					System.out.println("\n>> O Projeto precisa estar 'EM ANDAMENTO' para ser associado a uma Publicação! <<");
+				}
+			}
+		}
+		
+		if(flag == 0) {
+			System.out.println("\n>> Projeto não encontrado! <<");
+		}
+		
+		return publicacao;
+	}
+	
 	static ArrayList <Colaborador> listaColaboradores = new ArrayList <Colaborador> ();
 	static ArrayList <Projeto> listaProjetos = new ArrayList <Projeto> ();
 	static ArrayList <Producao> listaProducoes = new ArrayList <Producao> ();
@@ -456,7 +631,7 @@ public class ProdutividadeAcademica {
 					editarProjeto();
 					break;
 				case 4:
-					//metodo de criacao de producao
+					criarProducao();
 					break;
 				case 5:
 					//metodo para consulta de dados
