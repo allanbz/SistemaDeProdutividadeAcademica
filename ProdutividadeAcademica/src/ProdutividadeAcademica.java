@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.Collections;
+import java.lang.Comparable;
 
 class Colaborador {
 	
@@ -15,6 +17,8 @@ class Colaborador {
 		if(projetos.size() != 0) {
 			System.out.println("\nParticipou dos Projetos:\n");
 			
+			Collections.sort(projetos);
+			
 			for(Projeto p : projetos) {
 				
 				System.out.printf("Título: %s, Ano de término: %d\n", p.getTitulo(), p.getAnoDeTermino());
@@ -23,6 +27,8 @@ class Colaborador {
 
 		if(publicacoes.size() != 0) {
 			System.out.println("\nRealizou as Publicações:\n");
+			
+			Collections.sort(publicacoes);
 			
 			for(Publicacao p : publicacoes) {
 				
@@ -87,6 +93,7 @@ class Professor extends Colaborador {
 	
 	protected void printOrientacao() {
 		
+		Collections.sort(orientador);
 		System.out.println("Foi um Orientador em:\n");
 		
 		for(Orientacao o : orientador) {
@@ -106,7 +113,8 @@ class Pesquisador extends Colaborador {
 	
 	protected void printOrientacao() {
 		
-		System.out.println("\nFoi orientado em:\n");
+		Collections.sort(orientado);
+		System.out.println("Foi orientado em:\n");
 		
 		for(Orientacao o : orientado) {
 			System.out.printf("''%s'', no ano de %d\n", o.getTitulo(), o.getAno());
@@ -119,7 +127,7 @@ class Pesquisador extends Colaborador {
 	}
 }
 
-class Projeto {
+class Projeto implements Comparable<Projeto>{
 	
 	private String titulo;
 	private int anoInicio;
@@ -133,6 +141,17 @@ class Projeto {
 	
 	private int status;	//1-em elaboracao /2-em andamento /3-concluido
 	private int temProfessor;	//0-nao /1-sim
+	
+	public int compareTo(Projeto outroProjeto) {
+        
+		if (this.anoTermino > outroProjeto.getAnoDeTermino()) {
+            return -1;
+        }
+        if (this.anoTermino < outroProjeto.getAnoDeTermino()) {
+            return 1;
+        }
+        return 0;
+    }
 	
 	protected void printProjeto() {
 		
@@ -165,6 +184,8 @@ class Projeto {
 		if(producaoAcademica.size() != 0) {
 			
 			System.out.println("\nLista de publicações associadas ao Projeto:\n");
+			
+			Collections.sort(producaoAcademica);
 			
 			for(Publicacao p : producaoAcademica) {
 				
@@ -238,10 +259,21 @@ class Projeto {
 	}
 }
 
-class Producao {
+class Producao implements Comparable<Producao> {
 	
 	private String titulo;
 	private int anoDePublicacao;
+	
+	public int compareTo(Producao outroProjeto) {
+        
+		if (this.anoDePublicacao > outroProjeto.getAno()) {
+            return -1;
+        }
+        if (this.anoDePublicacao < outroProjeto.getAno()) {
+            return 1;
+        }
+        return 0;
+    }
 	
 	protected int getAno() {
 		
@@ -416,7 +448,7 @@ public class ProdutividadeAcademica {
 						}
 						
 						else {
-							System.out.println(">> O colaborador escolhido é graduando, e já está participando de 2 projetos! <<");
+							System.out.println("\n>> O colaborador escolhido é graduando, e já está participando de 2 projetos! <<");
 							break;
 						}
 					}
