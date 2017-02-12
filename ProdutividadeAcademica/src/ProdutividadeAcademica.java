@@ -348,86 +348,114 @@ public class ProdutividadeAcademica {
 	
 	public static void addColaborador() {
 		Scanner scanner = new Scanner(System.in);
+		Boolean verificador = false;
 		
-		System.out.println("\nQue tipo de colaborador gostaria de adicionar?\n");
-		System.out.println("1-Aluno\n2-Professor\n3-Pesquisador\n");
-		System.out.print("Opção desejada: ");
-		int opcao = scanner.nextInt();
-		scanner.nextLine(); //char de escape
-		
-		System.out.print("\nNome: ");
-		String nome = scanner.nextLine();
-		System.out.print("Email: ");
-		String email = scanner.nextLine();
-		
-		switch(opcao) {
-			case 1:
-				System.out.println("\nO aluno pertence à qual modalidade de ensino?\n");
-				System.out.println("1-Graduação\n2-Mestrado\n3-Doutorado\n");
+		while(!verificador) {
+			try {
+				System.out.println("\nQue tipo de colaborador gostaria de adicionar?\n");
+				System.out.println("1-Aluno\n2-Professor\n3-Pesquisador\n");
 				System.out.print("Opção desejada: ");
-				int aluno = scanner.nextInt();		
+				int opcao = scanner.nextInt();
+				scanner.nextLine(); //char de escape
 				
-				switch(aluno) {
+				if(opcao != 1 && opcao !=2 && opcao != 3) {
+					System.out.println("\n>> Número inválido! Operação cancelada! <<");
+					return;
+				}
+				
+				System.out.print("\nNome: ");
+				String nome = scanner.nextLine();
+				System.out.print("Email: ");
+				String email = scanner.nextLine();
+				
+				switch(opcao) {
 					case 1:
-						Graduando graduando = new Graduando();
-						graduando.setAtributos(nome, email);
-						listaColaboradores.add(graduando);
+						System.out.println("\nO aluno pertence à qual modalidade de ensino?\n");
+						System.out.println("1-Graduação\n2-Mestrado\n3-Doutorado\n");
+						System.out.print("Opção desejada: ");
+						int aluno = scanner.nextInt();	
+						
+						switch(aluno) {
+							case 1:
+								Graduando graduando = new Graduando();
+								graduando.setAtributos(nome, email);
+								listaColaboradores.add(graduando);
+								break;
+							case 2:
+								Mestrando mestrando = new Mestrando();
+								mestrando.setAtributos(nome, email);
+								listaColaboradores.add(mestrando);
+								break;
+							case 3:
+								Doutorando doutorando = new Doutorando();
+								doutorando.setAtributos(nome, email);
+								listaColaboradores.add(doutorando);
+								break;
+							default:
+								System.out.println("\n>> Número inválido! Operação cancelada! <<");
+								return;
+						}
 						break;
 					case 2:
-						Mestrando mestrando = new Mestrando();
-						mestrando.setAtributos(nome, email);
-						listaColaboradores.add(mestrando);
+						Professor professor = new Professor();
+						professor.setAtributos(nome, email);
+						listaColaboradores.add(professor);
 						break;
 					case 3:
-						Doutorando doutorando = new Doutorando();
-						doutorando.setAtributos(nome, email);
-						listaColaboradores.add(doutorando);
+						Pesquisador pesquisador = new Pesquisador();
+						pesquisador.setAtributos(nome, email);
+						listaColaboradores.add(pesquisador);
 						break;
 				}
-				break;
-			case 2:
-				Professor professor = new Professor();
-				professor.setAtributos(nome, email);
-				listaColaboradores.add(professor);
-				break;
-			case 3:
-				Pesquisador pesquisador = new Pesquisador();
-				pesquisador.setAtributos(nome, email);
-				listaColaboradores.add(pesquisador);
-				break;
+		
+				System.out.println("\n>> Colaborador cadastrado com sucesso! <<");
+				verificador = true;
+			}
+			catch(java.util.InputMismatchException e) {
+				System.out.println("\n>> Entrada inválida! Tente novamente. <<");
+				scanner.nextLine();	//char de escape
+			}
 		}
-
-		System.out.println("\n>> Colaborador cadastrado com sucesso! <<");
 	}
 		
 	public static void criarProjeto() {
 		Scanner scanner = new Scanner(System.in);
+		Boolean verificador = false;
 		
-		Projeto projeto = new Projeto();
-		
-		System.out.println("\nPreencha os dados do Projeto:\n");
-		System.out.print("Título: ");
-		String titulo = scanner.nextLine();
-		System.out.print("Ano de Início: ");
-		int anoInicio = scanner.nextInt();
-		System.out.print("Ano de término: ");
-		int anoTermino = scanner.nextInt();
-		System.out.print("Agência financiadora: ");
-		scanner.nextLine();	//char de escape
-		String agencia = scanner.nextLine();
-		System.out.print("Valor financiado: ");
-		double valor = scanner.nextDouble();
-		System.out.print("Descrição: ");
-		scanner.nextLine();	//char de escape
-		String descricao = scanner.nextLine();
-		System.out.print("Objetivo: ");
-		String objetivo = scanner.nextLine();
-		
-		projeto.setAtributos(titulo, anoInicio, anoTermino, agencia, valor, descricao, objetivo);
-		
-		projeto = incluirParticipante(projeto);
-		listaProjetos.add(projeto);
-		System.out.println("\n>> Projeto criado com sucesso! <<");
+		while(!verificador) {
+			try {
+				Projeto projeto = new Projeto();
+				
+				System.out.println("\nPreencha os dados do Projeto:\n");
+				System.out.print("Título: ");
+				String titulo = scanner.nextLine();
+				System.out.print("Ano de Início: ");
+				int anoInicio = scanner.nextInt();
+				System.out.print("Ano de término: ");
+				int anoTermino = scanner.nextInt();
+				System.out.print("Agência financiadora: ");
+				scanner.nextLine();	//char de escape
+				String agencia = scanner.nextLine();
+				System.out.print("Valor financiado: ");
+				double valor = scanner.nextDouble();
+				System.out.print("Descrição: ");
+				scanner.nextLine();	//char de escape
+				String descricao = scanner.nextLine();
+				System.out.print("Objetivo: ");
+				String objetivo = scanner.nextLine();
+				
+				projeto.setAtributos(titulo, anoInicio, anoTermino, agencia, valor, descricao, objetivo);
+				
+				projeto = incluirParticipante(projeto);
+				listaProjetos.add(projeto);
+				System.out.println("\n>> Projeto criado com sucesso! <<");
+				verificador = true;
+			}
+			catch(java.util.InputMismatchException e) {
+				System.out.println("\n>> Entrada inválida! Tente novamente. <<");
+				scanner.nextLine();	//char de escape
+			}
+		}		
 	}
 	
 	public static Projeto incluirParticipante(Projeto projeto) {
@@ -484,206 +512,247 @@ public class ProdutividadeAcademica {
 	}
 	
 	public static void editarProjeto() {
-		
 		Scanner scanner = new Scanner(System.in);
-		System.out.println("\nLista de Projetos em nosso Sistema:");
+		Boolean verificador = false;
 		
-		for(Projeto p : listaProjetos) {
-			System.out.printf("\n%s", p.getTitulo());
-		}
-		
-		System.out.print("\n\nNome do Projeto que deseja editar: ");	
-		String titulo = scanner.nextLine();
-		
-		int flag = 0;
-		
-		for(Projeto p : listaProjetos) {
-			String nomeDoProjeto = p.getTitulo();
-			
-			if(nomeDoProjeto.equals(titulo)) {
-				flag = 1;	//sinaliza que projeto foi encontrado
+		while(!verificador) {
+			try {
+				System.out.println("\nLista de Projetos em nosso Sistema:");
 				
-				System.out.println("\nO que deseja fazer?\n\n1-Alocar novo participante\n2-Alterar status do projeto\n");
-				System.out.print("Opção desejada: ");
-				int opcao = scanner.nextInt();
+				for(Projeto p : listaProjetos) {
+					System.out.printf("\n%s", p.getTitulo());
+				}
 				
-				if(opcao == 1) {
-					if(p.getStatus() == 1)	{
-						p = incluirParticipante(p);
-					} else {
-						System.out.println("\n>> Só é possível adicionar colaboradores em Projetos 'EM ELABORAÇÃO'! <<");
-					}
-				} else {
-					if(p.getStatus() == 1) {
-						if(p.getProfessor() == 1) {	
-							p.setStatus(2);
-							numProjetosEmElaboracao--;
-							numProjetosEmAndamento++;
-							System.out.println("\n>> O status do Projeto foi mudado de 'EM ELABORAÇÃO' para 'EM ANDAMENTO'. <<");
-						} else {
-							System.out.println("\n>> O Projeto precisa de um Professor antes de entrar 'EM ANDAMENTO'! <<");
+				System.out.print("\n\nNome do Projeto que deseja editar: ");	
+				String titulo = scanner.nextLine();
+				
+				int flag = 0;
+				
+				for(Projeto p : listaProjetos) {
+					String nomeDoProjeto = p.getTitulo();
+					
+					if(nomeDoProjeto.equals(titulo)) {
+						flag = 1;	//sinaliza que projeto foi encontrado
+						
+						System.out.println("\nO que deseja fazer?\n\n1-Alocar novo participante\n2-Alterar status do projeto\n");
+						System.out.print("Opção desejada: ");
+						int opcao = scanner.nextInt();
+						
+						switch(opcao) {
+							case 1:
+								if(p.getStatus() == 1)	{
+									p = incluirParticipante(p);
+								} else {
+									System.out.println("\n>> Só é possível adicionar colaboradores em Projetos 'EM ELABORAÇÃO'! <<");
+								}
+								break;
+							case 2:
+								if(p.getStatus() == 1) {
+									if(p.getProfessor() == 1) {	
+										p.setStatus(2);
+										numProjetosEmElaboracao--;
+										numProjetosEmAndamento++;
+										System.out.println("\n>> O status do Projeto foi mudado de 'EM ELABORAÇÃO' para 'EM ANDAMENTO'. <<");
+									} else {
+										System.out.println("\n>> O Projeto precisa de um Professor antes de entrar 'EM ANDAMENTO'! <<");
+									}
+								} else if(p.getStatus() == 2) {
+									if(p.getPublicacoes() != 0) {
+										p.setStatus(3);
+										numProjetosEmAndamento--;
+										numProjetosConcluidos++;
+										System.out.println("\n>> O status do Projeto foi mudado de 'EM ANDAMENTO' para 'CONCLUÍDO'. <<");
+									} else {
+										System.out.println("\n>> O Projeto precisa de Publicações antes de ser 'CONCLUÍDO'! <<");
+									}
+								} else if(p.getStatus() == 3) {
+									System.out.println("\n>> Esse Projeto já foi 'CONCLUÍDO'! <<\n");
+								}
+								break;
+							default:
+								System.out.println("\n>> Número inválido! Operação cancelada. <<");
+								return;
 						}
-					} else if(p.getStatus() == 2) {
-						if(p.getPublicacoes() != 0) {
-							p.setStatus(3);
-							numProjetosEmAndamento--;
-							numProjetosConcluidos++;
-							System.out.println("\n>> O status do Projeto foi mudado de 'EM ANDAMENTO' para 'CONCLUÍDO'. <<");
-						} else {
-							System.out.println("\n>> O Projeto precisa de Publicações antes de ser 'CONCLUÍDO'! <<");
-						}
-					} else if(p.getStatus() == 3) {
-						System.out.println("\n>> Esse Projeto já foi 'CONCLUÍDO'! <<\n");
+						break;
 					}
 				}
-
-				break;
+				
+				if(flag == 0) {
+					System.out.println("\n>> Projeto não encontrado! <<");
+				}
+				verificador = true;
 			}
-		}
-		
-		if(flag == 0) {
-			System.out.println("\n>> Projeto não encontrado! <<");
+			catch(java.util.InputMismatchException e) {
+				System.out.println("\n>> Entrada inválida! Tente novamente. <<");
+				scanner.nextLine();	//char de escape
+			}
 		}
 	}
 	
 	public static void criarProducao() {
 		Scanner scanner = new Scanner(System.in);
-		System.out.println("\nQuem tipo de Produção deseja registrar?\n\n1-Publicação\n2-Orientação\n");
-		System.out.print("Opção desejada: ");
-		int opcao = scanner.nextInt();
-		scanner.nextLine();	//char de escape
+		Boolean verificador = false;
 		
-		switch(opcao) {
-			case 1:
-				Publicacao publicacao = new Publicacao();
-				
-				System.out.println("\nPreencha os dados da Publicação:\n");
-				System.out.print("Título: ");
-				String titulo = scanner.nextLine();
-				System.out.print("Ano de publicação: ");
-				int anoPublicacao = scanner.nextInt();
+		while(!verificador) {
+			try {
+				System.out.println("\nQuem tipo de Produção deseja registrar?\n\n1-Publicação\n2-Orientação\n");
+				System.out.print("Opção desejada: ");
+				int opcao = scanner.nextInt();
 				scanner.nextLine();	//char de escape
-				System.out.print("Nome da Conferência: ");
-				String nomeConferencia = scanner.nextLine();
 				
-				publicacao.setAtributos(titulo, anoPublicacao);
-				publicacao.setConferencia(nomeConferencia);
-				publicacao = incluirAutor(publicacao);
-				
-				System.out.print("\nEssa Publicação está associada a algum Projeto (1-Sim/2-Não)? ");
-				int resposta = scanner.nextInt();
-				
-				if(resposta == 1) {
-					publicacao = associarProjeto(publicacao);
-				}
-				
-				System.out.println("\n>> Publicação registrada com sucesso! <<");
-				numPublicacoes++;
-				listaProducoes.add(publicacao);
-				break;
-			case 2:
-				Orientacao orientacao = new Orientacao();
-				
-				System.out.println("\nPreencha os dados da Orientação:\n");
-				System.out.print("Título: ");
-				String titulo2 = scanner.nextLine();
-				System.out.print("Ano de orientação: ");
-				int anoOrientacao = scanner.nextInt();
-				scanner.nextLine();	//char de escape
-				System.out.print("Nome do orientador: ");
-				String nomeOrientador = scanner.nextLine();
-				
-				orientacao.setAtributos(titulo2, anoOrientacao);
-				
-				int flag = 0;
-				
-				for(Colaborador c : listaColaboradores) {
-					String colaborador = c.getNome();
-					
-					if(colaborador.equals(nomeOrientador)) {
-						flag = 1;	//sinaliza que colaborador foi encontrado
+				switch(opcao) {
+					case 1:
+						Publicacao publicacao = new Publicacao();
 						
-						if(c instanceof Professor) {
-							((Professor) c).setOrientacao(orientacao);
-							break;
-						} else {
-							System.out.println("\n>> O colaborador precisa ser um Professor para ser orientador! <<");
+						System.out.println("\nPreencha os dados da Publicação:\n");
+						System.out.print("Título: ");
+						String titulo = scanner.nextLine();
+						System.out.print("Ano de publicação: ");
+						int anoPublicacao = scanner.nextInt();
+						scanner.nextLine();	//char de escape
+						System.out.print("Nome da Conferência: ");
+						String nomeConferencia = scanner.nextLine();
+						
+						publicacao.setAtributos(titulo, anoPublicacao);
+						publicacao.setConferencia(nomeConferencia);
+						publicacao = incluirAutor(publicacao);
+						
+						System.out.print("\nEssa Publicação está associada a algum Projeto (1-Sim/2-Não)? ");
+						int resposta = scanner.nextInt();
+						
+						if(resposta == 1) {
+							publicacao = associarProjeto(publicacao);
+						} else if(resposta != 2) {
+							System.out.println("\n>> Número inválido! Resposta padrão: NÃO. <<");
+						}
+						
+						System.out.println("\n>> Publicação registrada com sucesso! <<");
+						numPublicacoes++;
+						listaProducoes.add(publicacao);
+						break;
+					case 2:
+						Orientacao orientacao = new Orientacao();
+						
+						System.out.println("\nPreencha os dados da Orientação:\n");
+						System.out.print("Título: ");
+						String titulo2 = scanner.nextLine();
+						System.out.print("Ano de orientação: ");
+						int anoOrientacao = scanner.nextInt();
+						scanner.nextLine();	//char de escape
+						System.out.print("Nome do orientador: ");
+						String nomeOrientador = scanner.nextLine();
+						
+						orientacao.setAtributos(titulo2, anoOrientacao);
+						
+						int flag = 0;
+						
+						for(Colaborador c : listaColaboradores) {
+							String colaborador = c.getNome();
+							
+							if(colaborador.equals(nomeOrientador)) {
+								flag = 1;	//sinaliza que colaborador foi encontrado
+								
+								if(c instanceof Professor) {
+									((Professor) c).setOrientacao(orientacao);
+									break;
+								} else {
+									System.out.println("\n>> O colaborador precisa ser um Professor para ser orientador! <<");
+									return;
+								}
+							}
+						}
+						
+						if(flag == 0) {
+							System.out.println("\n>> Professor não encontrado! <<");
 							return;
 						}
-					}
-				}
-				
-				if(flag == 0) {
-					System.out.println("\n>> Professor não encontrado! <<");
-					return;
-				}
-				
-				System.out.print("Nome do pesquisador: ");
-				String nomePesquisador = scanner.nextLine();
-				
-				int flag2 = 0;
-				
-				for(Colaborador c : listaColaboradores) {
-					String colaborador = c.getNome();
-					
-					if(colaborador.equals(nomePesquisador)) {
-						flag2 = 1;	//sinaliza que colaborador foi encontrado
 						
-						if(c instanceof Pesquisador) {
-							((Pesquisador) c).setOrientacao(orientacao);
-							break;
-						} else {
-							System.out.println("\n>> O colaborador precisa ser um Pesquisador para ser orientado! <<");
+						System.out.print("Nome do pesquisador: ");
+						String nomePesquisador = scanner.nextLine();
+						
+						int flag2 = 0;
+						
+						for(Colaborador c : listaColaboradores) {
+							String colaborador = c.getNome();
+							
+							if(colaborador.equals(nomePesquisador)) {
+								flag2 = 1;	//sinaliza que colaborador foi encontrado
+								
+								if(c instanceof Pesquisador) {
+									((Pesquisador) c).setOrientacao(orientacao);
+									break;
+								} else {
+									System.out.println("\n>> O colaborador precisa ser um Pesquisador para ser orientado! <<");
+									return;
+								}
+							}
+						}
+						
+						if(flag2 == 0) {
+							System.out.println("\n>> Pesquisador não encontrado! <<");
 							return;
 						}
-					}
+						
+						System.out.println("\n>> Orientação registrada com sucesso! <<");
+						orientacao.setAtributos(nomeOrientador, nomePesquisador);
+						numOrientacoes++;
+						listaProducoes.add(orientacao);
+						break;
+					default:
+						System.out.println("\n>> Número inválido! Operação cancelada! <<");
+						return;
 				}
-				
-				if(flag2 == 0) {
-					System.out.println("\n>> Pesquisador não encontrado! <<");
-					return;
-				}
-				
-				System.out.println("\n>> Orientação registrada com sucesso! <<");
-				orientacao.setAtributos(nomeOrientador, nomePesquisador);
-				numOrientacoes++;
-				listaProducoes.add(orientacao);
-				break;
+				verificador = true;
+			}
+			catch(java.util.InputMismatchException e) {
+				System.out.println("\n>> Entrada inválida! Tente novamente. <<");
+				scanner.nextLine();	//char de escape
+			}
 		}
 	}
 	
 	public static Publicacao incluirAutor(Publicacao publicacao) {
 		Scanner scanner = new Scanner(System.in);
+		Boolean verificador = false;
 		
-		System.out.print("\nQuantos autores possui a Publicação? ");
-		int qtd = scanner.nextInt();
-		scanner.nextLine();	//char de escape
-		
-		for(int i = 0; i < qtd; i++) {	
-			System.out.println("\nLista dos colaboradores cadastrados em nosso Sistema:");
-			
-			for(Colaborador c : listaColaboradores) {
-				System.out.printf("\n%s", c.getNome());
-			}
-			
-			System.out.print("\n\nQual o nome do autor? ");	
-			String autor = scanner.nextLine();
-			int flag = 0;
-			
-			for(Colaborador c : listaColaboradores) {
-				String colaborador = c.getNome();
+		while(!verificador) {
+			try {
+				System.out.print("\nQuantos autores possui a Publicação? ");
+				int qtd = scanner.nextInt();
+				scanner.nextLine();	//char de escape
 				
-				if(colaborador.equals(autor)) {
-					flag = 1;	//sinaliza que colaborador foi encontrado
-					c.setPublicacao(publicacao);
-					publicacao.addAutor(colaborador);
-					System.out.println("\n>> Autor registrado com sucesso! <<");
-					break;
+				for(int i = 0; i < qtd; i++) {	
+					System.out.println("\nLista dos colaboradores cadastrados em nosso Sistema:");
+					
+					for(Colaborador c : listaColaboradores) {
+						System.out.printf("\n%s", c.getNome());
+					}
+					
+					System.out.print("\n\nQual o nome do autor? ");	
+					String autor = scanner.nextLine();
+					int flag = 0;
+					
+					for(Colaborador c : listaColaboradores) {
+						String colaborador = c.getNome();
+						
+						if(colaborador.equals(autor)) {
+							flag = 1;	//sinaliza que colaborador foi encontrado
+							c.setPublicacao(publicacao);
+							publicacao.addAutor(colaborador);
+							System.out.println("\n>> Autor registrado com sucesso! <<");
+							break;
+						}
+					}
+					
+					if(flag == 0) {
+						System.out.println("\n>> Autor não encontrado! <<");
+					}
 				}
+				verificador = true;
 			}
-			
-			if(flag == 0) {
-				System.out.println("\n>> Autor não encontrado! <<");
+			catch(java.util.InputMismatchException e) {
+				System.out.println("\n>> Entrada inválida! Tente novamente. <<");
+				scanner.nextLine();	//char de escape
 			}
 		}
 		
@@ -728,72 +797,84 @@ public class ProdutividadeAcademica {
 	
 	public static void consultarDados() {
 		Scanner scanner = new Scanner(System.in);
+		Boolean verificador = false;
 		
-		System.out.println("\nQual a modalidade de consulta que deseja realizar?\n\n1-Por colaborador\n2-Por projeto\n");
-		System.out.print("Opção desejada: ");
-		int opcao = scanner.nextInt();
-		scanner.nextLine();	//char de escape
-		
-		switch(opcao) {
-			case 1:
-				System.out.println("\nLista dos colaboradores cadastrados em nosso Sistema:");
+		while(!verificador) {
+			try {
+				System.out.println("\nQual a modalidade de consulta que deseja realizar?\n\n1-Por colaborador\n2-Por projeto\n");
+				System.out.print("Opção desejada: ");
+				int opcao = scanner.nextInt();
+				scanner.nextLine();	//char de escape
 				
-				for(Colaborador c : listaColaboradores) {
-					System.out.printf("\n%s", c.getNome());
-				}
-				
-				System.out.print("\n\nNome de quem deseja consultar: ");	
-				String colaborador = scanner.nextLine();
-				int flag = 0;
-				
-				for(Colaborador c : listaColaboradores) {
-					String participante = c.getNome();
-					
-					if(participante.equals(colaborador)) {
-						flag = 1;	//sinaliza que colaborador foi encontrado
+				switch(opcao) {
+					case 1:
+						System.out.println("\nLista dos colaboradores cadastrados em nosso Sistema:");
 						
-						c.printDados();
-						
-						if(c instanceof Professor) {
-							((Professor) c).printOrientacao();
-						} else if (c instanceof Pesquisador) {	
-							((Pesquisador) c).printOrientacao();
+						for(Colaborador c : listaColaboradores) {
+							System.out.printf("\n%s", c.getNome());
 						}
 						
+						System.out.print("\n\nNome de quem deseja consultar: ");	
+						String colaborador = scanner.nextLine();
+						int flag = 0;
+						
+						for(Colaborador c : listaColaboradores) {
+							String participante = c.getNome();
+							
+							if(participante.equals(colaborador)) {
+								flag = 1;	//sinaliza que colaborador foi encontrado
+								
+								c.printDados();
+								
+								if(c instanceof Professor) {
+									((Professor) c).printOrientacao();
+								} else if (c instanceof Pesquisador) {	
+									((Pesquisador) c).printOrientacao();
+								}
+								break;
+							}
+						}
+						
+						if(flag == 0) {
+							System.out.println("\n>> Colaborador não encontrado! <<");
+						}
 						break;
-					}
-				}
-				
-				if(flag == 0) {
-					System.out.println("\n>> Colaborador não encontrado! <<");
-				}
-				break;
-			case 2:
-				System.out.println("\nLista de Projetos em nosso Sistema:");
-				
-				for(Projeto p : listaProjetos) {
-					System.out.printf("\n%s", p.getTitulo());
-				}
-				
-				System.out.print("\n\nNome do Projeto que deseja consultar: ");	
-				String titulo = scanner.nextLine();
-				
-				int flag2 = 0;
-				
-				for(Projeto p : listaProjetos) {
-					String nomeDoProjeto = p.getTitulo();
-					
-					if(nomeDoProjeto.equals(titulo)) {
-						flag2 = 1;	//sinaliza que titulo foi encontrado
-						p.printProjeto();
+					case 2:
+						System.out.println("\nLista de Projetos em nosso Sistema:");
+						
+						for(Projeto p : listaProjetos) {
+							System.out.printf("\n%s", p.getTitulo());
+						}
+						
+						System.out.print("\n\nNome do Projeto que deseja consultar: ");	
+						String titulo = scanner.nextLine();
+						
+						int flag2 = 0;
+						
+						for(Projeto p : listaProjetos) {
+							String nomeDoProjeto = p.getTitulo();
+							
+							if(nomeDoProjeto.equals(titulo)) {
+								flag2 = 1;	//sinaliza que titulo foi encontrado
+								p.printProjeto();
+								break;
+							}
+						}
+						
+						if(flag2 == 0) {
+							System.out.println("\n>> Projeto não encontrado! <<");
+						}
 						break;
-					}
+					default:
+						System.out.println("\n>> Número inválido! Operação cancelada. <<");
+						return;
 				}
-				
-				if(flag2 == 0) {
-					System.out.println("\n>> Projeto não encontrado! <<");
-				}
-				break;
+				verificador = true;
+			}
+			catch(java.util.InputMismatchException e) {
+				System.out.println("\n>> Entrada inválida! Tente novamente. <<");
+				scanner.nextLine();	//char de escape
+			}
 		}
 	}
 	
@@ -801,21 +882,8 @@ public class ProdutividadeAcademica {
 		System.out.printf("\nRELATÓRIO DE PRODUÇÃO\n\nNúmero de colaboradores cadastrados: %d\n", listaColaboradores.size());
 		System.out.printf("Número de projetos em elaboração: %d\nNúmero de projetos em andamento: %d\n", numProjetosEmElaboracao, numProjetosEmAndamento);
 		System.out.printf("Número de projetos concluídos: %d\n", numProjetosConcluidos);
-		System.out.printf("Número total de projetos: %d\n",(numProjetosEmElaboracao + numProjetosEmAndamento + numProjetosConcluidos));
-		
-		int numPublicacoes = 0;
-		int numOrientacoes = 0;
-		
-		for(Producao p : listaProducoes) {
-			if(p instanceof Publicacao) {
-				numPublicacoes++;
-			} else if(p instanceof Orientacao) {
-				numOrientacoes++;
-			}
-		}
-		
-		System.out.printf("Número de publicações: %d\n", numPublicacoes);
-		System.out.printf("Número de orientações: %d\n", numOrientacoes);
+		System.out.printf("Número total de projetos: %d\n",(numProjetosEmElaboracao + numProjetosEmAndamento + numProjetosConcluidos));	
+		System.out.printf("Número de publicações: %d\nNúmero de orientações: %d\n", numPublicacoes, numOrientacoes);
 	}
 	
 	static ArrayList <Colaborador> listaColaboradores = new ArrayList <Colaborador> ();	//lista de todos os colaboradores adicionados
@@ -838,14 +906,28 @@ public class ProdutividadeAcademica {
 		int comando = 1;
 		
 		while(comando != 0) {
-			System.out.println("\nSelecione a opção desejada:\n");
-			System.out.println("1-Cadastrar colaborador\n2-Criar projeto\n3-Editar projeto\n4-Criar produção");
-			System.out.println("5-Consulta de dados\n6-Relatório de Produção Acadêmica\n\n0-Encerrar\n");
-			System.out.print("Opção desejada: ");
+			Boolean verificador = false;
 			
-			comando = scanner.nextInt();
+			while(!verificador) {
+				try {
+					System.out.println("\nSelecione a opção desejada:\n");
+					System.out.println("1-Cadastrar colaborador\n2-Criar projeto\n3-Editar projeto\n4-Criar produção");
+					System.out.println("5-Consulta de dados\n6-Relatório de Produção Acadêmica\n\n0-Encerrar\n");
+					System.out.print("Opção desejada: ");
+					
+					comando = scanner.nextInt();
+					verificador = true;
+				}
+				catch(java.util.InputMismatchException e) {
+					System.out.println("\n>> Entrada inválida! Digite um número inteiro! <<");
+					scanner.nextLine();	//char de escape
+				}
+			}
 			
 			switch(comando) {
+				case 0:
+					System.out.println("\n>> Até logo! <<");
+					break;
 				case 1:
 					addColaborador();
 					break;
@@ -864,6 +946,9 @@ public class ProdutividadeAcademica {
 					break;
 				case 6:
 					imprimirRelatorio();
+					break;
+				default:
+					System.out.println("\n>> Digite um número válido! <<");
 					break;
 			}
 		}
